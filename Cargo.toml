@@ -10,4 +10,5 @@ nssa-framework = { git = "https://github.com/jimmy-claw/nssa-framework.git", bra
 nssa-framework-cli = { git = "https://github.com/jimmy-claw/nssa-framework.git", branch = "main" }
 borsh = "1.5.7"
 serde = { version = "1.0", default-features = false, features = ["derive"] }
+serde_json = "1.0"
 tokio = { version = "1.28.2", features = ["net", "rt-multi-thread", "sync", "macros"] }

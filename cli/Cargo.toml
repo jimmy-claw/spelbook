@@ -17,3 +17,4 @@ path = "src/bin/generate_idl.rs"
 nssa-framework = { workspace = true }
 nssa-framework-cli = { workspace = true }
 tokio = { workspace = true }
+serde_json = { workspace = true }
