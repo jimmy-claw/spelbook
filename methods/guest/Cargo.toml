@@ -10,7 +10,7 @@ path = "src/bin/registry.rs"
 [dependencies]
 registry_core = { path = "../../registry_core" }
 registry_program = { path = "../../registry_program" }
-nssa_core.workspace = true
-nssa-framework = { git = "https://github.com/jimmy-claw/nssa-framework.git" }
-risc0-zkvm.workspace = true
-borsh.workspace = true
+nssa_core = { workspace = true }
+nssa-framework = { workspace = true }
+risc0-zkvm = { workspace = true }
+borsh = { workspace = true }
