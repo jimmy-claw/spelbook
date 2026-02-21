@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 registry_core = { path = "../registry_core" }
-nssa_core = { git = "https://github.com/logos-blockchain/lssa.git", branch = "main", features = ["host"] }
+nssa_core = { workspace = true }
 nssa-framework = { workspace = true }
 serde = { workspace = true }
 borsh = { workspace = true }
