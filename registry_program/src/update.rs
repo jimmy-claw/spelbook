@@ -168,9 +168,7 @@ mod tests {
         assert!(chained.is_empty());
         assert_eq!(post_states.len(), 3);
 
-        let updated: ProgramEntry = borsh::from_slice(
-            &Vec::from(post_states[2].account().data.clone()),
-        ).unwrap();
+        let updated: ProgramEntry = borsh::from_slice(&Vec::from(post_states[2].account().data.clone())).unwrap();
 
         assert_eq!(updated.version, "0.2.0");
         assert_eq!(updated.idl_cid, "bafy_new_cid");
@@ -199,9 +197,7 @@ mod tests {
         let accounts = make_test_accounts(&author_id, &entry, true);
         let (post_states, _) = handle(&accounts, &args);
 
-        let updated: ProgramEntry = borsh::from_slice(
-            &Vec::from(post_states[2].account().data.clone()),
-        ).unwrap();
+        let updated: ProgramEntry = borsh::from_slice(&Vec::from(post_states[2].account().data.clone())).unwrap();
 
         assert_eq!(updated.version, "0.3.0");
         assert_eq!(updated.idl_cid, "bafy_original_cid");        // unchanged

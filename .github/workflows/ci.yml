@@ -60,5 +60,10 @@ jobs:
         with:
           components: rustfmt
 
+      - name: Install logos-blockchain-circuits
+        run: curl -sSL https://raw.githubusercontent.com/logos-blockchain/logos-blockchain/main/scripts/setup-logos-blockchain-circuits.sh | bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check formatting
         run: cargo fmt --all -- --check

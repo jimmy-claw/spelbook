@@ -159,15 +159,11 @@ mod tests {
         assert_eq!(post_states.len(), 3);
 
         // Verify registry state was updated
-        let state: RegistryState = borsh::from_slice(
-            &Vec::from(post_states[0].account().data.clone()),
-        ).unwrap();
+        let state: RegistryState = borsh::from_slice(&Vec::from(post_states[0].account().data.clone())).unwrap();
         assert_eq!(state.program_count, 1);
 
         // Verify program entry was written correctly
-        let entry: ProgramEntry = borsh::from_slice(
-            &Vec::from(post_states[2].account().data.clone()),
-        ).unwrap();
+        let entry: ProgramEntry = borsh::from_slice(&Vec::from(post_states[2].account().data.clone())).unwrap();
         assert_eq!(entry.name, "test-program");
         assert_eq!(entry.version, "0.1.0");
         assert_eq!(entry.idl_cid, "bafy2bzacedqwerty");
@@ -191,9 +187,7 @@ mod tests {
 
         let (post_states, _) = handle(&accounts, &args, 99999);
 
-        let state: RegistryState = borsh::from_slice(
-            &Vec::from(post_states[0].account().data.clone()),
-        ).unwrap();
+        let state: RegistryState = borsh::from_slice(&Vec::from(post_states[0].account().data.clone())).unwrap();
         assert_eq!(state.program_count, 4);
     }
 
