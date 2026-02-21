@@ -8,9 +8,7 @@ fn parse_args(args: &str) -> Result<Value, String> {
 }
 
 fn get_str<'a>(v: &'a Value, key: &str) -> Result<&'a str, String> {
-    v[key]
-        .as_str()
-        .ok_or_else(|| format!("missing field '{}'", key))
+    v[key].as_str().ok_or_else(|| format!("missing field '{}'", key))
 }
 
 pub fn upload(args: &str) -> String {

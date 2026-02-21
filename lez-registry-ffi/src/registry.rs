@@ -10,9 +10,7 @@ fn parse_args(args: &str) -> Result<Value, String> {
 }
 
 fn get_str<'a>(v: &'a Value, key: &str) -> Result<&'a str, String> {
-    v[key]
-        .as_str()
-        .ok_or_else(|| format!("missing field '{}'", key))
+    v[key].as_str().ok_or_else(|| format!("missing field '{}'", key))
 }
 
 pub fn register(args: &str) -> String {
@@ -22,7 +20,14 @@ pub fn register(args: &str) -> String {
     };
 
     // Validate required fields
-    for field in &["sequencer_url", "wallet_path", "program_id", "name", "version", "idl_cid"] {
+    for field in &[
+        "sequencer_url",
+        "wallet_path",
+        "program_id",
+        "name",
+        "version",
+        "idl_cid",
+    ] {
         if let Err(e) = get_str(&v, field) {
             return json!({"success": false, "error": e}).to_string();
         }
