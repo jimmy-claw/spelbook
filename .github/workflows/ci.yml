@@ -22,6 +22,11 @@ jobs:
         with:
           prefix-key: "unit"
 
+      - name: Install logos-blockchain-circuits
+        run: curl -sSL https://raw.githubusercontent.com/logos-blockchain/logos-blockchain/main/scripts/setup-logos-blockchain-circuits.sh | bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run unit tests
         run: cargo test -p registry_core -p registry_program
 
@@ -36,6 +41,11 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           prefix-key: "check"
+
+      - name: Install logos-blockchain-circuits
+        run: curl -sSL https://raw.githubusercontent.com/logos-blockchain/logos-blockchain/main/scripts/setup-logos-blockchain-circuits.sh | bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cargo check (host crates)
         run: cargo check -p registry_core -p registry_program -p registry-cli
