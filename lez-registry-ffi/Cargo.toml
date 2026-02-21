@@ -1,0 +1,13 @@
+[package]
+name = "lez-registry-ffi"
+version = "0.1.0"
+edition = "2021"
+description = "C FFI wrapper for lez-registry — enables Logos Core Qt plugin integration"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+registry_core = { path = "../registry_core" }
+serde_json = "1.0"
+tokio = { version = "1", features = ["rt", "rt-multi-thread"] }

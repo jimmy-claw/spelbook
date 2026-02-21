@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["registry_core", "registry_program", "methods", "methods/guest", "cli", "e2e_tests"]
+members = ["registry_core", "registry_program", "methods", "methods/guest", "cli", "e2e_tests", "lez-registry-ffi"]
 
 [workspace.dependencies]
 risc0-zkvm = { version = "=3.0.5", features = ['std'] }
