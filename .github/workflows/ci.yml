@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "jimmy/**"]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: "unit"
+
+      - name: Run unit tests
+        run: cargo test -p registry_core -p registry_program
+
+  check:
+    name: Cargo Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: "check"
+
+      - name: Cargo check (host crates)
+        run: cargo check -p registry_core -p registry_program -p registry-cli
