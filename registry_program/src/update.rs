@@ -19,10 +19,7 @@ use registry_core::{ProgramEntry, UpdateArgs};
 /// - The stored `ProgramEntry.author` must equal `author_account.account_id` (ownership check).
 ///
 /// Note: PDA derivation correctness is enforced by the NSSA framework.
-pub fn handle(
-    accounts: &[AccountWithMetadata],
-    args: &UpdateArgs,
-) -> (Vec<AccountPostState>, Vec<ChainedCall>) {
+pub fn handle(accounts: &[AccountWithMetadata], args: &UpdateArgs) -> (Vec<AccountPostState>, Vec<ChainedCall>) {
     assert!(
         accounts.len() >= 3,
         "Update requires registry_state + author + program_entry accounts, got {}",
@@ -34,10 +31,7 @@ pub fn handle(
     let program_entry_account = &accounts[2];
 
     // Author must sign
-    assert!(
-        author_account.is_authorized,
-        "Author must sign the Update transaction"
-    );
+    assert!(author_account.is_authorized, "Author must sign the Update transaction");
 
     // Deserialize existing program entry — must be initialized
     let entry_data: Vec<u8> = program_entry_account.account.data.clone().into();
@@ -45,13 +39,11 @@ pub fn handle(
         !entry_data.is_empty(),
         "program_entry PDA is not initialized — register the program first"
     );
-    let mut entry: ProgramEntry =
-        borsh::from_slice(&entry_data).expect("Failed to deserialize ProgramEntry");
+    let mut entry: ProgramEntry = borsh::from_slice(&entry_data).expect("Failed to deserialize ProgramEntry");
 
     // Verify author matches stored entry
     assert_eq!(
-        entry.author,
-        author_account.account_id,
+        entry.author, author_account.account_id,
         "Only the original author can update this program entry"
     );
 
@@ -125,11 +117,7 @@ mod tests {
 
     /// Build three accounts for update tests.
     /// PDA ID is a dummy — framework validates real PDA correctness.
-    fn make_test_accounts(
-        author_id: &[u8; 32],
-        entry: &ProgramEntry,
-        authorized: bool,
-    ) -> Vec<AccountWithMetadata> {
+    fn make_test_accounts(author_id: &[u8; 32], entry: &ProgramEntry, authorized: bool) -> Vec<AccountWithMetadata> {
         let entry_bytes = borsh::to_vec(entry).unwrap();
         vec![
             make_account(&[10u8; 32], vec![], false), // registry_state (pass-through)
@@ -189,9 +177,9 @@ mod tests {
         let args = UpdateArgs {
             program_id: test_program_id(),
             version: "0.3.0".to_string(),
-            idl_cid: String::new(),      // empty → keep original
-            description: String::new(),  // empty → keep original
-            tags: vec![],                // empty → keep original
+            idl_cid: String::new(),     // empty → keep original
+            description: String::new(), // empty → keep original
+            tags: vec![],               // empty → keep original
         };
 
         let accounts = make_test_accounts(&author_id, &entry, true);
@@ -200,8 +188,8 @@ mod tests {
         let updated: ProgramEntry = borsh::from_slice(&Vec::from(post_states[2].account().data.clone())).unwrap();
 
         assert_eq!(updated.version, "0.3.0");
-        assert_eq!(updated.idl_cid, "bafy_original_cid");        // unchanged
-        assert_eq!(updated.description, "Original description");   // unchanged
+        assert_eq!(updated.idl_cid, "bafy_original_cid"); // unchanged
+        assert_eq!(updated.description, "Original description"); // unchanged
         assert_eq!(updated.tags, vec!["original_tag".to_string()]); // unchanged
     }
 

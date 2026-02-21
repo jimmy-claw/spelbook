@@ -9,7 +9,7 @@
 
 use nssa_core::account::{Account, AccountWithMetadata};
 use nssa_core::program::{AccountPostState, ChainedCall};
-use registry_core::{ProgramEntry, RegistryState, RegisterArgs};
+use registry_core::{ProgramEntry, RegisterArgs, RegistryState};
 
 /// Handle the Register instruction.
 ///
@@ -99,7 +99,7 @@ pub fn handle(
 mod tests {
     use super::*;
     use nssa_core::account::{Account, AccountId};
-    use registry_core::{RegisterArgs, RegistryState, ProgramEntry};
+    use registry_core::{ProgramEntry, RegisterArgs, RegistryState};
 
     fn make_account(id: &[u8; 32], data: Vec<u8>, authorized: bool) -> AccountWithMetadata {
         let mut account = Account::default();
@@ -131,16 +131,12 @@ mod tests {
     /// Build the three standard accounts needed for Register tests.
     /// The program_entry_pda account ID is set to a dummy value — PDA correctness
     /// is validated by the NSSA framework, not by the handler.
-    fn make_test_accounts(
-        state_data: Vec<u8>,
-        author_id: &[u8; 32],
-        authorized: bool,
-    ) -> Vec<AccountWithMetadata> {
+    fn make_test_accounts(state_data: Vec<u8>, author_id: &[u8; 32], authorized: bool) -> Vec<AccountWithMetadata> {
         vec![
             make_account(&[10u8; 32], state_data, false), // registry_state
-            make_account(author_id, vec![], authorized),    // author
+            make_account(author_id, vec![], authorized),  // author
             AccountWithMetadata {
-                account_id: AccountId::new([20u8; 32]),    // program_entry PDA (dummy id)
+                account_id: AccountId::new([20u8; 32]), // program_entry PDA (dummy id)
                 account: Account::default(),
                 is_authorized: false,
             },

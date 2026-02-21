@@ -19,12 +19,9 @@ mod registry_program {
     /// - program_entry_pda: the new per-program PDA to initialize (init, pda derived from program_id)
     #[instruction]
     pub fn register(
-        #[account(mut)]
-        registry_state: AccountWithMetadata,
-        #[account(signer)]
-        author: AccountWithMetadata,
-        #[account(init)]
-        program_entry_pda: AccountWithMetadata,
+        #[account(mut)] registry_state: AccountWithMetadata,
+        #[account(signer)] author: AccountWithMetadata,
+        #[account(init)] program_entry_pda: AccountWithMetadata,
         program_id: nssa_core::program::ProgramId,
         name: String,
         version: String,
@@ -46,8 +43,7 @@ mod registry_program {
         // Use 0 as timestamp placeholder (zkvm guests don't have system time)
         let timestamp: u64 = 0;
 
-        let (post_states, chained_calls) =
-            handlers::register::handle(&accounts, &args, timestamp);
+        let (post_states, chained_calls) = handlers::register::handle(&accounts, &args, timestamp);
         Ok(NssaOutput::with_chained_calls(post_states, chained_calls))
     }
 
@@ -59,12 +55,9 @@ mod registry_program {
     /// - program_entry_pda: the existing per-program PDA (mutable)
     #[instruction]
     pub fn update(
-        #[account(mut)]
-        registry_state: AccountWithMetadata,
-        #[account(signer)]
-        author: AccountWithMetadata,
-        #[account(mut)]
-        program_entry_pda: AccountWithMetadata,
+        #[account(mut)] registry_state: AccountWithMetadata,
+        #[account(signer)] author: AccountWithMetadata,
+        #[account(mut)] program_entry_pda: AccountWithMetadata,
         program_id: nssa_core::program::ProgramId,
         version: String,
         idl_cid: String,
@@ -81,8 +74,7 @@ mod registry_program {
             tags,
         };
 
-        let (post_states, chained_calls) =
-            handlers::update::handle(&accounts, &args);
+        let (post_states, chained_calls) = handlers::update::handle(&accounts, &args);
         Ok(NssaOutput::with_chained_calls(post_states, chained_calls))
     }
 }
