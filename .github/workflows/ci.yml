@@ -39,3 +39,16 @@ jobs:
 
       - name: Cargo check (host crates)
         run: cargo check -p registry_core -p registry_program -p registry-cli
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
