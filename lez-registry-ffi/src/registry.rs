@@ -215,14 +215,14 @@ async fn register_async(v: &Value) -> String {
     let registry_state_id = compute_registry_state_pda(&registry_program_id);
     let entry_pda_id = compute_program_entry_pda(&registry_program_id, &program_id);
 
-    let instruction = Instruction::Register(RegisterArgs {
+    let instruction = Instruction::Register {
         program_id,
         name: name.clone(),
         version: version.clone(),
         idl_cid: idl_cid.clone(),
         description,
         tags,
-    });
+    };
 
     match submit_signed_registry_tx(
         &wallet_core,
@@ -328,13 +328,13 @@ async fn update_async(v: &Value) -> String {
     let registry_state_id = compute_registry_state_pda(&registry_program_id);
     let entry_pda_id = compute_program_entry_pda(&registry_program_id, &program_id);
 
-    let instruction = Instruction::Update(UpdateArgs {
+    let instruction = Instruction::Update {
         program_id,
         version,
         idl_cid,
         description,
         tags,
-    });
+    };
 
     match submit_signed_registry_tx(
         &wallet_core,

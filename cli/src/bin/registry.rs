@@ -483,14 +483,14 @@ async fn main() {
             println!("   Entry PDA:      {}", entry_pda_id);
             println!("   IDL CID:        {}", resolved_cid);
 
-            let instruction = Instruction::Register(RegisterArgs {
+            let instruction = Instruction::Register {
                 program_id: prog_id,
                 name: name.clone(),
                 version: version.clone(),
                 idl_cid: resolved_cid.clone(),
                 description,
                 tags: tag,
-            });
+            };
 
             submit_signed_tx(
                 &wallet_core,
@@ -552,13 +552,13 @@ async fn main() {
             println!("🔄 Updating program entry...");
             println!("   Entry PDA: {}", entry_pda_id);
 
-            let instruction = Instruction::Update(UpdateArgs {
+            let instruction = Instruction::Update {
                 program_id: prog_id,
                 version,
                 idl_cid: resolved_cid,
                 description,
                 tags: tag,
-            });
+            };
 
             submit_signed_tx(
                 &wallet_core,
