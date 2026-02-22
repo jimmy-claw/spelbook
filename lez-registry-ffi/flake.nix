@@ -128,8 +128,8 @@
               echo "Vendor base: $VENDOR_BASE"
 
               if [ -n "$VENDOR_BASE" ]; then
-                # Find nssa crate across ALL vendor subdirs
-                NSSA_DIR=$(find "$VENDOR_BASE" -maxdepth 4 -name 'nssa-*' -type d 2>/dev/null | head -1 || true)
+                # Find nssa crate across ALL vendor subdirs (may be a symlink)
+                NSSA_DIR=$(find -L "$VENDOR_BASE" -maxdepth 4 -name 'nssa-0*' -type d 2>/dev/null | head -1 || true)
                 if [ -n "$NSSA_DIR" ]; then
                   PARENT=$(dirname "$NSSA_DIR")
                   echo "Found nssa at: $NSSA_DIR"
@@ -141,7 +141,7 @@
                   chmod -R u+w "$WRITABLE_VENDOR"
 
                   # Inject artifacts
-                  NSSA_DIR2=$(find "$WRITABLE_VENDOR" -maxdepth 3 -name 'nssa-*' -type d | head -1)
+                  NSSA_DIR2=$(find "$WRITABLE_VENDOR" -maxdepth 4 -name 'nssa-0*' -type d | head -1)
                   PARENT2=$(dirname "$NSSA_DIR2")
                   mkdir -p "$PARENT2/artifacts/program_methods"
                   cp ${artifactsDir}/program_methods/*.bin "$PARENT2/artifacts/program_methods/"
