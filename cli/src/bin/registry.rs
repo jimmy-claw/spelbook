@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use base64::{Engine, engine::general_purpose::STANDARD as BASE64};
+use base64::engine::general_purpose::STANDARD as BASE64;
 /// LEZ Program Registry CLI
 ///
 /// On-chain registry for LEZ programs + Logos Storage (Codex) IDL management.
@@ -20,7 +20,7 @@ use nssa::{
     public_transaction::{Message, WitnessSet},
 };
 use registry_core::{
-    Instruction, ProgramEntry, RegisterArgs, RegistryState, UpdateArgs, compute_program_entry_pda,
+    Instruction, ProgramEntry, RegistryState, compute_program_entry_pda,
     compute_registry_state_pda,
 };
 use wallet::WalletCore;
