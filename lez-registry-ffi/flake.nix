@@ -35,23 +35,29 @@
 
           craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
 
-          # Fetch pre-built circuit files needed by logos-blockchain-pol build.rs
-          # These are platform-specific (contain native binaries)
-          circuitsArchName = {
-            "x86_64-linux"  = "x86_64-linux";
-            "aarch64-linux" = "x86_64-linux";  # TODO: add aarch64 circuits
-            "x86_64-darwin" = "x86_64-linux";   # TODO: add darwin circuits
-            "aarch64-darwin" = "x86_64-linux";   # TODO: add darwin circuits
+          # Fetch pre-built circuit files from official logos-blockchain-circuits releases
+          # See: https://github.com/logos-blockchain/logos-blockchain-circuits/releases
+          circuitsVersion = "v0.4.1";
+          circuitsPlatform = {
+            "x86_64-linux"   = "linux-x86_64";
+            "aarch64-linux"  = "linux-aarch64";
+            "x86_64-darwin"  = "macos-x86_64";
+            "aarch64-darwin" = "macos-aarch64";
           }.${system};
 
           logosBlockchainCircuits = pkgs.fetchurl {
-            url = "https://github.com/jimmy-claw/lez-registry/releases/download/circuits-v0.1.0/logos-blockchain-circuits-${circuitsArchName}.tar.gz";
-            sha256 = "59fd9275e5afdaf2d94408787f23fdeb12ea6a53a52a328da6ce14ea2cd76692";
+            url = "https://github.com/logos-blockchain/logos-blockchain-circuits/releases/download/${circuitsVersion}/logos-blockchain-circuits-${circuitsVersion}-${circuitsPlatform}.tar.gz";
+            hash = {
+              "x86_64-linux"   = "sha256-Oi3xhqm5Sd4PaCSHWMvsJm2YPtSlm11BBG99xG30tiM=";
+              "aarch64-linux"  = "";  # TODO: compute when needed
+              "x86_64-darwin"  = "";  # TODO: compute when needed
+              "aarch64-darwin" = "";  # TODO: compute when needed
+            }.${system};
           };
 
           circuitsDir = pkgs.runCommand "logos-blockchain-circuits" {} ''
             mkdir -p $out
-            tar xzf ${logosBlockchainCircuits} -C $out
+            tar xzf ${logosBlockchainCircuits} -C $out --strip-components=1
           '';
 
           # Pre-built NSSA program method binaries (needed by nssa build.rs)
