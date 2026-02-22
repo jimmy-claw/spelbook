@@ -85,9 +85,12 @@ pub fn handle(
     // Author account passes through unchanged
     let author_post = author_account.account.clone();
 
+    // Use new_claimed_if_default for registry_state so the first call (when the
+    // account is still Account::default()) properly claims it. Subsequent calls
+    // where the account is already owned by this program will use new() semantics.
     (
         vec![
-            AccountPostState::new(registry_state_post),
+            AccountPostState::new_claimed_if_default(registry_state_post),
             AccountPostState::new(author_post),
             AccountPostState::new_claimed(program_entry_post),
         ],
