@@ -109,20 +109,48 @@
 
             # nssa build.rs expects CARGO_MANIFEST_DIR/../artifacts/program_methods/
             # which resolves into the read-only Nix store vendor dir.
-            # We create a writable vendor dir with artifacts injected.
-            cargoVendorDir = let
-              baseVendor = craneLib.vendorCargoDeps { inherit src; };
-            in pkgs.runCommand "vendor-with-artifacts" {} ''
-              cp -r ${baseVendor} $out
-              chmod -R u+w $out
+            # We use postUnpack to create the artifacts dir in the build sandbox.
+            # Crane mounts vendor dirs via bind mounts, but the parent dirs
+            # in the build sandbox are writable.
+            preBuild = ''
+              echo "=== Injecting NSSA artifacts ==="
+              # Find the cargo vendor dir being used
+              VENDOR_DIR=$(grep -r 'directory = ' .cargo/config.toml 2>/dev/null | head -1 | sed 's/.*= "//;s/"//')
+              echo "Vendor dir from config: $VENDOR_DIR"
 
-              # Find the nssa crate dir and create artifacts next to it
-              for nssa_dir in $(find $out -maxdepth 2 -name 'nssa-*' -type d); do
-                parent=$(dirname "$nssa_dir")
-                mkdir -p "$parent/artifacts/program_methods"
-                cp ${artifactsDir}/program_methods/*.bin "$parent/artifacts/program_methods/"
-                echo "Injected artifacts at $parent/artifacts/"
-              done
+              # Find nssa crate in the vendor tree
+              NSSA_DIR=$(find "$VENDOR_DIR" -maxdepth 3 -name 'nssa-*' -type d 2>/dev/null | head -1)
+              if [ -n "$NSSA_DIR" ]; then
+                PARENT=$(dirname "$NSSA_DIR")
+                echo "Found nssa at: $NSSA_DIR, parent: $PARENT"
+                mkdir -p "$PARENT/artifacts/program_methods" 2>/dev/null || {
+                  # If read-only, copy the whole vendor dir to a writable location
+                  echo "Vendor dir is read-only, creating writable copy..."
+                  WRITABLE_VENDOR="/build/vendor-writable"
+                  cp -rL "$VENDOR_DIR" "$WRITABLE_VENDOR"
+                  chmod -R u+w "$WRITABLE_VENDOR"
+
+                  # Inject artifacts
+                  NSSA_DIR2=$(find "$WRITABLE_VENDOR" -maxdepth 3 -name 'nssa-*' -type d | head -1)
+                  PARENT2=$(dirname "$NSSA_DIR2")
+                  mkdir -p "$PARENT2/artifacts/program_methods"
+                  cp ${artifactsDir}/program_methods/*.bin "$PARENT2/artifacts/program_methods/"
+                  echo "Injected artifacts at $PARENT2/artifacts/"
+
+                  # Update .cargo/config.toml to use writable vendor
+                  sed -i "s|$VENDOR_DIR|$WRITABLE_VENDOR|g" .cargo/config.toml
+                  echo "Updated .cargo/config.toml to use writable vendor"
+                }
+                # If mkdir succeeded (writable), just copy
+                if [ -d "$PARENT/artifacts/program_methods" ]; then
+                  cp ${artifactsDir}/program_methods/*.bin "$PARENT/artifacts/program_methods/" 2>/dev/null || true
+                  echo "Injected artifacts at $PARENT/artifacts/"
+                fi
+              else
+                echo "WARNING: Could not find nssa crate in vendor dir"
+                find "$VENDOR_DIR" -maxdepth 2 -type d | head -20
+              fi
+              echo "=== Done injecting NSSA artifacts ==="
             '';
           };
 
