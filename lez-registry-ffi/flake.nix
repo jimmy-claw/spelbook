@@ -123,17 +123,21 @@
               fi
               echo "Vendor dir: $VENDOR_DIR"
 
-              if [ -n "$VENDOR_DIR" ]; then
-                # Find nssa crate in the vendor tree
-                NSSA_DIR=$(find "$VENDOR_DIR" -maxdepth 3 -name 'nssa-*' -type d 2>/dev/null | head -1 || true)
+              # Crane vendor-cargo-deps has multiple hash subdirs, search the parent
+              VENDOR_BASE=$(dirname "$VENDOR_DIR")
+              echo "Vendor base: $VENDOR_BASE"
+
+              if [ -n "$VENDOR_BASE" ]; then
+                # Find nssa crate across ALL vendor subdirs
+                NSSA_DIR=$(find "$VENDOR_BASE" -maxdepth 4 -name 'nssa-*' -type d 2>/dev/null | head -1 || true)
                 if [ -n "$NSSA_DIR" ]; then
                   PARENT=$(dirname "$NSSA_DIR")
                   echo "Found nssa at: $NSSA_DIR"
 
-                  # Vendor dir is in Nix store (read-only), create writable copy
+                  # Vendor dir is in Nix store (read-only), create writable copy of entire vendor base
                   WRITABLE_VENDOR="$PWD/vendor-writable"
                   echo "Creating writable vendor copy at $WRITABLE_VENDOR..."
-                  cp -rL "$VENDOR_DIR" "$WRITABLE_VENDOR"
+                  cp -rL "$VENDOR_BASE" "$WRITABLE_VENDOR"
                   chmod -R u+w "$WRITABLE_VENDOR"
 
                   # Inject artifacts
@@ -147,12 +151,12 @@
                   # Update ALL cargo config files to use writable vendor
                   for cfg in .cargo-home/config.toml .cargo/config.toml; do
                     if [ -f "$cfg" ]; then
-                      sed -i "s|$VENDOR_DIR|$WRITABLE_VENDOR|g" "$cfg"
+                      sed -i "s|$VENDOR_BASE|$WRITABLE_VENDOR|g" "$cfg"
                       echo "Updated $cfg"
                     fi
                   done
                 else
-                  echo "WARNING: nssa crate not found in $VENDOR_DIR"
+                  echo "WARNING: nssa crate not found in $VENDOR_BASE"
                 fi
               else
                 echo "WARNING: No vendor dir found"
