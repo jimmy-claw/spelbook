@@ -155,6 +155,17 @@ void lez_registry_free_string(char* s);
  */
 char* lez_registry_version(void);
 
+
+/* ── IDL ─────────────────────────────────────────────────────────────────── */
+
+/**
+ * Returns the IDL JSON for the lez-registry program.
+ * Caller must free with lez_registry_free_string().
+ *
+ * Returns: IDL JSON string (UTF-8, null-terminated).
+ */
+char* lez_registry_get_idl(void);
+
 #ifdef __cplusplus
 }
 #endif

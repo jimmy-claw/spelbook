@@ -149,3 +149,13 @@ pub extern "C" fn lez_registry_free_string(s: *mut c_char) {
 pub extern "C" fn lez_registry_version() -> *mut c_char {
     to_cstring(env!("CARGO_PKG_VERSION").to_string())
 }
+
+// ── IDL ───────────────────────────────────────────────────────────────────────
+
+/// Returns the IDL JSON for the lez-registry program.
+/// Caller must free with lez_registry_free_string().
+#[no_mangle]
+pub extern "C" fn lez_registry_get_idl() -> *mut c_char {
+    const IDL_JSON: &str = include_str!("registry_idl.json");
+    to_cstring(IDL_JSON.to_string())
+}
