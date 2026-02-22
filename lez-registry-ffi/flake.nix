@@ -107,10 +107,22 @@
             # logos-blockchain-pol build.rs needs circuits directory
             LOGOS_BLOCKCHAIN_CIRCUITS = "${circuitsDir}";
 
-            # nssa build.rs expects ../artifacts/program_methods/ with .bin files
-            # Symlink the pre-built artifacts into the source tree
-            preConfigure = ''
-              ln -sf ${artifactsDir} artifacts
+            # nssa build.rs expects CARGO_MANIFEST_DIR/../artifacts/program_methods/
+            # which resolves into the read-only Nix store vendor dir.
+            # We create a writable vendor dir with artifacts injected.
+            cargoVendorDir = let
+              baseVendor = craneLib.vendorCargoDeps { inherit src; };
+            in pkgs.runCommand "vendor-with-artifacts" {} ''
+              cp -r ${baseVendor} $out
+              chmod -R u+w $out
+
+              # Find the nssa crate dir and create artifacts next to it
+              for nssa_dir in $(find $out -maxdepth 2 -name 'nssa-*' -type d); do
+                parent=$(dirname "$nssa_dir")
+                mkdir -p "$parent/artifacts/program_methods"
+                cp ${artifactsDir}/program_methods/*.bin "$parent/artifacts/program_methods/"
+                echo "Injected artifacts at $parent/artifacts/"
+              done
             '';
           };
 
