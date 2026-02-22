@@ -427,8 +427,8 @@ async fn main() {
     }
 
     // Override sequencer URL before wallet init
-    std::env::set_var("NSSA_SEQUENCER_URL", &cli.sequencer_url);
-    std::env::set_var("NSSA_STORAGE_URL", &cli.storage_url);
+    unsafe { std::env::set_var("NSSA_SEQUENCER_URL", &cli.sequencer_url); }
+    unsafe { std::env::set_var("NSSA_STORAGE_URL", &cli.storage_url); }
 
     let wallet_core = WalletCore::from_env().unwrap_or_else(|e| {
         eprintln!("❌ Failed to load wallet: {}", e);
