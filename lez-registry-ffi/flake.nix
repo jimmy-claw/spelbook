@@ -54,6 +54,17 @@
             tar xzf ${logosBlockchainCircuits} -C $out
           '';
 
+          # Pre-built NSSA program method binaries (needed by nssa build.rs)
+          nssaProgramMethods = pkgs.fetchurl {
+            url = "https://github.com/jimmy-claw/lez-registry/releases/download/circuits-v0.1.0/nssa-program-methods.tar.gz";
+            sha256 = "a40ee19678cb44b07167dbe7ccc3e7279585d7fb6182831d792c03e6ad2b64d5";
+          };
+
+          artifactsDir = pkgs.runCommand "nssa-artifacts" {} ''
+            mkdir -p $out/program_methods
+            tar xzf ${nssaProgramMethods} -C $out
+          '';
+
           # Filter source to only include Rust/Cargo files and the include/ dir
           src = lib.cleanSourceWith {
             src = ./..;  # workspace root (lez-registry/)
@@ -89,6 +100,12 @@
 
             # logos-blockchain-pol build.rs needs circuits directory
             LOGOS_BLOCKCHAIN_CIRCUITS = "${circuitsDir}";
+
+            # nssa build.rs expects ../artifacts/program_methods/ with .bin files
+            # Symlink the pre-built artifacts into the source tree
+            preConfigure = ''
+              ln -sf ${artifactsDir} artifacts
+            '';
           };
 
           # Build deps first (for caching)
