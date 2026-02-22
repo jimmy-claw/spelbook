@@ -1,3 +1,5 @@
+use anyhow::{Context, Result};
+use base64::{Engine, engine::general_purpose::STANDARD as BASE64};
 /// LEZ Program Registry CLI
 ///
 /// On-chain registry for LEZ programs + Logos Storage (Codex) IDL management.
@@ -18,13 +20,10 @@ use nssa::{
     public_transaction::{Message, WitnessSet},
 };
 use registry_core::{
-    Instruction, RegisterArgs, UpdateArgs,
-    ProgramEntry, RegistryState,
-    compute_registry_state_pda, compute_program_entry_pda,
+    Instruction, ProgramEntry, RegisterArgs, RegistryState, UpdateArgs, compute_program_entry_pda,
+    compute_registry_state_pda,
 };
 use wallet::WalletCore;
-use anyhow::{Context, Result};
-use base64::{Engine, engine::general_purpose::STANDARD as BASE64};
 
 const DEFAULT_SEQUENCER_URL: &str = "http://127.0.0.1:3040";
 const DEFAULT_STORAGE_URL: &str = "http://127.0.0.1:8080";
@@ -212,10 +211,7 @@ async fn submit_and_confirm(wallet_core: &WalletCore, tx: PublicTransaction, lab
     println!("   tx_hash: {}", response.tx_hash);
     println!("   Waiting for confirmation...");
 
-    let poller = wallet::poller::TxPoller::new(
-        wallet_core.config().clone(),
-        wallet_core.sequencer_client.clone(),
-    );
+    let poller = wallet::poller::TxPoller::new(wallet_core.config().clone(), wallet_core.sequencer_client.clone());
 
     match poller.poll_tx(response.tx_hash.clone()).await {
         Ok(_) => {
@@ -246,10 +242,12 @@ async fn submit_signed_tx(
         .storage()
         .user_data
         .get_pub_account_signing_key(signer_id)
-        .ok_or_else(|| anyhow::anyhow!(
-            "signing key not found for account {} — is it in your wallet?",
-            signer_id
-        ))?;
+        .ok_or_else(|| {
+            anyhow::anyhow!(
+                "signing key not found for account {} — is it in your wallet?",
+                signer_id
+            )
+        })?;
 
     let message = Message::try_new(registry_program_id, account_ids, nonces, instruction)
         .map_err(|e| anyhow::anyhow!("failed to build message: {:?}", e))?;
@@ -272,8 +270,7 @@ async fn fetch_account_data<T: borsh::BorshDeserialize>(
     if data.is_empty() {
         return Ok(None);
     }
-    let decoded = borsh::from_slice::<T>(&data)
-        .with_context(|| format!("failed to deserialize {}", label))?;
+    let decoded = borsh::from_slice::<T>(&data).with_context(|| format!("failed to deserialize {}", label))?;
     Ok(Some(decoded))
 }
 
@@ -590,13 +587,12 @@ async fn main() {
             let registry_state_id = compute_registry_state_pda(&registry_program_id);
             println!("📋 Fetching registry state ({})...", registry_state_id);
 
-            let state: Option<RegistryState> =
-                fetch_account_data(&wallet_core, registry_state_id, "registry state")
-                    .await
-                    .unwrap_or_else(|e| {
-                        eprintln!("❌ {:#}", e);
-                        std::process::exit(1);
-                    });
+            let state: Option<RegistryState> = fetch_account_data(&wallet_core, registry_state_id, "registry state")
+                .await
+                .unwrap_or_else(|e| {
+                    eprintln!("❌ {:#}", e);
+                    std::process::exit(1);
+                });
 
             match state {
                 None => println!("Registry not yet initialized (no programs registered)."),
@@ -611,7 +607,10 @@ async fn main() {
         }
 
         // ── Info ────────────────────────────────────────────────────────
-        Commands::Info { registry_program, program_id } => {
+        Commands::Info {
+            registry_program,
+            program_id,
+        } => {
             let registry_program_id = parse_program_id(&registry_program).unwrap_or_else(|e| {
                 eprintln!("❌ Invalid --registry-program: {}", e);
                 std::process::exit(1);
@@ -624,13 +623,12 @@ async fn main() {
             let entry_pda_id = compute_program_entry_pda(&registry_program_id, &prog_id);
             println!("🔍 Looking up program entry ({})...", entry_pda_id);
 
-            let entry: Option<ProgramEntry> =
-                fetch_account_data(&wallet_core, entry_pda_id, "program entry")
-                    .await
-                    .unwrap_or_else(|e| {
-                        eprintln!("❌ {:#}", e);
-                        std::process::exit(1);
-                    });
+            let entry: Option<ProgramEntry> = fetch_account_data(&wallet_core, entry_pda_id, "program entry")
+                .await
+                .unwrap_or_else(|e| {
+                    eprintln!("❌ {:#}", e);
+                    std::process::exit(1);
+                });
 
             match entry {
                 None => println!("No program entry found for program_id '{}'.", program_id),

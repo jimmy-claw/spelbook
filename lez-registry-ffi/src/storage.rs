@@ -1,8 +1,8 @@
 //! Logos Storage (Codex) operation implementations.
 //! Uses the Codex HTTP REST API: POST /api/codex/v1/data, GET /api/codex/v1/data/{cid}/...
 
-use base64::{Engine, engine::general_purpose::STANDARD as BASE64};
-use serde_json::{Value, json};
+use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
+use serde_json::{json, Value};
 
 fn parse_args(args: &str) -> Result<Value, String> {
     serde_json::from_str(args).map_err(|e| format!("invalid JSON: {}", e))
@@ -46,15 +46,15 @@ pub fn upload(args: &str) -> String {
         Err(e) => return json!({"success": false, "error": format!("runtime error: {}", e)}).to_string(),
     };
 
-    rt.block_on(async move {
-        upload_async(&logos_storage_url, &file_path).await
-    })
+    rt.block_on(async move { upload_async(&logos_storage_url, &file_path).await })
 }
 
 pub async fn upload_async(logos_storage_url: &str, file_path: &str) -> String {
     let file_bytes = match tokio::fs::read(file_path).await {
         Ok(b) => b,
-        Err(e) => return json!({"success": false, "error": format!("cannot read file '{}': {}", file_path, e)}).to_string(),
+        Err(e) => {
+            return json!({"success": false, "error": format!("cannot read file '{}': {}", file_path, e)}).to_string()
+        }
     };
 
     let filename = std::path::Path::new(file_path)
@@ -140,9 +140,7 @@ pub fn download(args: &str) -> String {
         Err(e) => return json!({"success": false, "error": format!("runtime error: {}", e)}).to_string(),
     };
 
-    rt.block_on(async move {
-        download_async(&logos_storage_url, &cid).await
-    })
+    rt.block_on(async move { download_async(&logos_storage_url, &cid).await })
 }
 
 pub async fn download_async(logos_storage_url: &str, cid: &str) -> String {
@@ -166,7 +164,9 @@ pub async fn download_async(logos_storage_url: &str, cid: &str) -> String {
 
     let bytes = match resp.bytes().await {
         Ok(b) => b,
-        Err(e) => return json!({"success": false, "error": format!("failed to read response body: {}", e)}).to_string(),
+        Err(e) => {
+            return json!({"success": false, "error": format!("failed to read response body: {}", e)}).to_string()
+        }
     };
 
     let encoded = BASE64.encode(&bytes);
@@ -207,9 +207,7 @@ pub fn fetch_idl(args: &str) -> String {
         Err(e) => return json!({"success": false, "error": format!("runtime error: {}", e)}).to_string(),
     };
 
-    rt.block_on(async move {
-        fetch_idl_async(&logos_storage_url, &cid).await
-    })
+    rt.block_on(async move { fetch_idl_async(&logos_storage_url, &cid).await })
 }
 
 pub async fn fetch_idl_async(logos_storage_url: &str, cid: &str) -> String {

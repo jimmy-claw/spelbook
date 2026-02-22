@@ -9,15 +9,14 @@
 //! - `program_id_hex`: 64-char hex string identifying the registry program binary
 
 use nssa::{
-    AccountId, PublicTransaction,
     public_transaction::{Message, WitnessSet},
+    AccountId, PublicTransaction,
 };
 use registry_core::{
-    Instruction, RegisterArgs, UpdateArgs,
-    compute_registry_state_pda, compute_program_entry_pda,
-    ProgramEntry, RegistryState,
+    compute_program_entry_pda, compute_registry_state_pda, Instruction, ProgramEntry, RegisterArgs, RegistryState,
+    UpdateArgs,
 };
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use wallet::WalletCore;
 
 // ---------------------------------------------------------------------------
@@ -76,10 +75,12 @@ async fn submit_signed_registry_tx(
         .storage()
         .user_data
         .get_pub_account_signing_key(signer_id)
-        .ok_or_else(|| format!(
-            "signing key not found for account {} — is it in your wallet?",
-            signer_id
-        ))?;
+        .ok_or_else(|| {
+            format!(
+                "signing key not found for account {} — is it in your wallet?",
+                signer_id
+            )
+        })?;
 
     let message = Message::try_new(registry_program_id, account_ids, nonces, instruction)
         .map_err(|e| format!("failed to build message: {:?}", e))?;
@@ -103,8 +104,7 @@ async fn fetch_borsh_account<T: borsh::BorshDeserialize>(
     if data.is_empty() {
         return Ok(None);
     }
-    let decoded = borsh::from_slice::<T>(&data)
-        .map_err(|e| format!("failed to deserialize account data: {}", e))?;
+    let decoded = borsh::from_slice::<T>(&data).map_err(|e| format!("failed to deserialize account data: {}", e))?;
     Ok(Some(decoded))
 }
 
@@ -148,9 +148,7 @@ pub fn register(args: &str) -> String {
         Err(e) => return json!({"success": false, "error": format!("runtime error: {}", e)}).to_string(),
     };
 
-    rt.block_on(async {
-        register_async(&v).await
-    })
+    rt.block_on(async { register_async(&v).await })
 }
 
 async fn register_async(v: &Value) -> String {
@@ -275,9 +273,7 @@ pub fn update(args: &str) -> String {
         Err(e) => return json!({"success": false, "error": format!("runtime error: {}", e)}).to_string(),
     };
 
-    rt.block_on(async {
-        update_async(&v).await
-    })
+    rt.block_on(async { update_async(&v).await })
 }
 
 async fn update_async(v: &Value) -> String {
@@ -388,9 +384,7 @@ pub fn list(args: &str) -> String {
         Err(e) => return json!({"success": false, "error": format!("runtime error: {}", e)}).to_string(),
     };
 
-    rt.block_on(async {
-        list_async(&v).await
-    })
+    rt.block_on(async { list_async(&v).await })
 }
 
 async fn list_async(v: &Value) -> String {
@@ -499,9 +493,7 @@ pub fn get_by_id(args: &str) -> String {
         Err(e) => return json!({"success": false, "error": format!("runtime error: {}", e)}).to_string(),
     };
 
-    rt.block_on(async {
-        get_by_id_async(&v).await
-    })
+    rt.block_on(async { get_by_id_async(&v).await })
 }
 
 async fn get_by_id_async(v: &Value) -> String {
