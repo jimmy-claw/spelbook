@@ -3,7 +3,7 @@ name = "registry-cli"
 version = "0.1.0"
 edition = "2024"
 
-# CLI binary — uses the nssa-framework generic IDL-driven CLI
+# Dedicated registry CLI binary
 [[bin]]
 name = "registry"
 path = "src/bin/registry.rs"
@@ -16,5 +16,19 @@ path = "src/bin/generate_idl.rs"
 [dependencies]
 nssa-framework = { workspace = true }
 nssa-framework-cli = { workspace = true }
+registry_core = { path = "../registry_core" }
 tokio = { workspace = true }
 serde_json = { workspace = true }
+serde = { version = "1.0", features = ["derive"] }
+clap = { version = "4", features = ["derive"] }
+clap_complete = "4"
+reqwest = { version = "0.12", features = ["json", "multipart"] }
+base64 = "0.22"
+borsh = { workspace = true }
+hex = "0.4"
+anyhow = "1.0"
+
+# nssa deps for transaction building
+nssa_core = { git = "https://github.com/logos-blockchain/lssa.git", branch = "main", features = ["host"] }
+nssa = { git = "https://github.com/logos-blockchain/lssa.git", branch = "main" }
+wallet = { git = "https://github.com/logos-blockchain/lssa.git", branch = "main" }

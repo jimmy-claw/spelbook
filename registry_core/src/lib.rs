@@ -21,11 +21,24 @@ use serde::{Deserialize, Serialize};
 pub enum Instruction {
     /// Register a new program entry.  Anyone can register; the signer becomes
     /// the author and only the author may later update the entry.
-    Register(RegisterArgs),
+    Register {
+        program_id: ProgramId,
+        name: String,
+        version: String,
+        idl_cid: String,
+        description: String,
+        tags: Vec<String>,
+    },
 
     /// Update metadata for an existing program entry.
     /// Only the original author (signer) is allowed.
-    Update(UpdateArgs),
+    Update {
+        program_id: ProgramId,
+        version: String,
+        idl_cid: String,
+        description: String,
+        tags: Vec<String>,
+    },
 }
 
 /// Arguments for the `Register` instruction.
