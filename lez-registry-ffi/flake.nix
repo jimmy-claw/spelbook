@@ -35,6 +35,25 @@
 
           craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
 
+          # Fetch pre-built circuit files needed by logos-blockchain-pol build.rs
+          # These are platform-specific (contain native binaries)
+          circuitsArchName = {
+            "x86_64-linux"  = "x86_64-linux";
+            "aarch64-linux" = "x86_64-linux";  # TODO: add aarch64 circuits
+            "x86_64-darwin" = "x86_64-linux";   # TODO: add darwin circuits
+            "aarch64-darwin" = "x86_64-linux";   # TODO: add darwin circuits
+          }.${system};
+
+          logosBlockchainCircuits = pkgs.fetchurl {
+            url = "https://github.com/jimmy-claw/lez-registry/releases/download/circuits-v0.1.0/logos-blockchain-circuits-${circuitsArchName}.tar.gz";
+            sha256 = "59fd9275e5afdaf2d94408787f23fdeb12ea6a53a52a328da6ce14ea2cd76692";
+          };
+
+          circuitsDir = pkgs.runCommand "logos-blockchain-circuits" {} ''
+            mkdir -p $out
+            tar xzf ${logosBlockchainCircuits} -C $out
+          '';
+
           # Filter source to only include Rust/Cargo files and the include/ dir
           src = lib.cleanSourceWith {
             src = ./..;  # workspace root (lez-registry/)
@@ -67,6 +86,9 @@
 
             # risc0 guest builds need this
             RISC0_SKIP_BUILD = "1";
+
+            # logos-blockchain-pol build.rs needs circuits directory
+            LOGOS_BLOCKCHAIN_CIRCUITS = "${circuitsDir}";
           };
 
           # Build deps first (for caching)
