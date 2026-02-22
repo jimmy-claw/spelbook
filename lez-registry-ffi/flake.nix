@@ -114,19 +114,25 @@
             # in the build sandbox are writable.
             preBuild = ''
               echo "=== Injecting NSSA artifacts ==="
-              # Find the cargo vendor dir being used
-              VENDOR_DIR=$(grep -r 'directory = ' .cargo/config.toml 2>/dev/null | head -1 | sed 's/.*= "//;s/"//')
-              echo "Vendor dir from config: $VENDOR_DIR"
+              # Crane puts vendor config in .cargo-home/config.toml
+              # Find the vendor dir from any config.toml that has a [source] directory
+              VENDOR_DIR=$(grep 'directory = ' .cargo-home/config.toml .cargo/config.toml 2>/dev/null | head -1 | sed 's/.*directory = "//;s/"//' || true)
+              if [ -z "$VENDOR_DIR" ]; then
+                echo "WARNING: Could not find vendor dir in cargo config, searching..."
+                VENDOR_DIR=$(find /nix/store -maxdepth 1 -name '*vendor-cargo-deps' -type d 2>/dev/null | head -1 || true)
+              fi
+              echo "Vendor dir: $VENDOR_DIR"
 
-              # Find nssa crate in the vendor tree
-              NSSA_DIR=$(find "$VENDOR_DIR" -maxdepth 3 -name 'nssa-*' -type d 2>/dev/null | head -1)
-              if [ -n "$NSSA_DIR" ]; then
-                PARENT=$(dirname "$NSSA_DIR")
-                echo "Found nssa at: $NSSA_DIR, parent: $PARENT"
-                mkdir -p "$PARENT/artifacts/program_methods" 2>/dev/null || {
-                  # If read-only, copy the whole vendor dir to a writable location
-                  echo "Vendor dir is read-only, creating writable copy..."
-                  WRITABLE_VENDOR="/build/vendor-writable"
+              if [ -n "$VENDOR_DIR" ]; then
+                # Find nssa crate in the vendor tree
+                NSSA_DIR=$(find "$VENDOR_DIR" -maxdepth 3 -name 'nssa-*' -type d 2>/dev/null | head -1 || true)
+                if [ -n "$NSSA_DIR" ]; then
+                  PARENT=$(dirname "$NSSA_DIR")
+                  echo "Found nssa at: $NSSA_DIR"
+
+                  # Vendor dir is in Nix store (read-only), create writable copy
+                  WRITABLE_VENDOR="$PWD/vendor-writable"
+                  echo "Creating writable vendor copy at $WRITABLE_VENDOR..."
                   cp -rL "$VENDOR_DIR" "$WRITABLE_VENDOR"
                   chmod -R u+w "$WRITABLE_VENDOR"
 
@@ -136,19 +142,20 @@
                   mkdir -p "$PARENT2/artifacts/program_methods"
                   cp ${artifactsDir}/program_methods/*.bin "$PARENT2/artifacts/program_methods/"
                   echo "Injected artifacts at $PARENT2/artifacts/"
+                  ls -la "$PARENT2/artifacts/program_methods/"
 
-                  # Update .cargo/config.toml to use writable vendor
-                  sed -i "s|$VENDOR_DIR|$WRITABLE_VENDOR|g" .cargo/config.toml
-                  echo "Updated .cargo/config.toml to use writable vendor"
-                }
-                # If mkdir succeeded (writable), just copy
-                if [ -d "$PARENT/artifacts/program_methods" ]; then
-                  cp ${artifactsDir}/program_methods/*.bin "$PARENT/artifacts/program_methods/" 2>/dev/null || true
-                  echo "Injected artifacts at $PARENT/artifacts/"
+                  # Update ALL cargo config files to use writable vendor
+                  for cfg in .cargo-home/config.toml .cargo/config.toml; do
+                    if [ -f "$cfg" ]; then
+                      sed -i "s|$VENDOR_DIR|$WRITABLE_VENDOR|g" "$cfg"
+                      echo "Updated $cfg"
+                    fi
+                  done
+                else
+                  echo "WARNING: nssa crate not found in $VENDOR_DIR"
                 fi
               else
-                echo "WARNING: Could not find nssa crate in vendor dir"
-                find "$VENDOR_DIR" -maxdepth 2 -type d | head -20
+                echo "WARNING: No vendor dir found"
               fi
               echo "=== Done injecting NSSA artifacts ==="
             '';
