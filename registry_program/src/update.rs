@@ -18,7 +18,7 @@ use registry_core::{ProgramEntry, UpdateArgs};
 /// - `author_account.is_authorized` must be true (transaction signature check).
 /// - The stored `ProgramEntry.author` must equal `author_account.account_id` (ownership check).
 ///
-/// Note: PDA derivation correctness is enforced by the NSSA framework.
+/// Note: PDA derivation correctness is enforced by the LEZ framework.
 pub fn handle(accounts: &[AccountWithMetadata], args: &UpdateArgs) -> (Vec<AccountPostState>, Vec<ChainedCall>) {
     assert!(
         accounts.len() >= 3,

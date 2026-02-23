@@ -8,14 +8,14 @@ edition = "2024"
 name = "registry"
 path = "src/bin/registry.rs"
 
-# IDL generator — reads #[nssa_program] annotations and emits JSON
+# IDL generator — reads #[lez_program] annotations and emits JSON
 [[bin]]
 name = "generate_idl"
 path = "src/bin/generate_idl.rs"
 
 [dependencies]
-nssa-framework = { workspace = true }
-nssa-framework-cli = { workspace = true }
+lez-framework = { workspace = true }
+lez-cli = { workspace = true }
 registry_core = { path = "../registry_core" }
 tokio = { workspace = true }
 serde_json = { workspace = true }
@@ -28,7 +28,7 @@ borsh = { workspace = true }
 hex = "0.4"
 anyhow = "1.0"
 
-# nssa deps for transaction building
+# LEZ deps for transaction building
 nssa_core = { git = "https://github.com/logos-blockchain/lssa.git", branch = "main", features = ["host"] }
 nssa = { git = "https://github.com/logos-blockchain/lssa.git", branch = "main" }
 wallet = { git = "https://github.com/logos-blockchain/lssa.git", branch = "main" }
