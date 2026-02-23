@@ -1,10 +1,10 @@
 #![no_main]
 
-use nssa_framework::prelude::*;
+use lez_framework::prelude::*;
 
 risc0_zkvm::guest::entry!(main);
 
-#[nssa_program(instruction = "registry_core::Instruction")]
+#[lez_program(instruction = "registry_core::Instruction")]
 mod registry_program {
     #[allow(unused_imports)]
     use super::*;
@@ -28,7 +28,7 @@ mod registry_program {
         idl_cid: String,
         description: String,
         tags: Vec<String>,
-    ) -> NssaResult {
+    ) -> LezResult {
         let accounts = vec![registry_state, author, program_entry_pda];
 
         let args = registry_core::RegisterArgs {
@@ -44,7 +44,7 @@ mod registry_program {
         let timestamp: u64 = 0;
 
         let (post_states, chained_calls) = handlers::register::handle(&accounts, &args, timestamp);
-        Ok(NssaOutput::with_chained_calls(post_states, chained_calls))
+        Ok(LezOutput::with_chained_calls(post_states, chained_calls))
     }
 
     /// Update metadata for an existing registered program.
@@ -63,7 +63,7 @@ mod registry_program {
         idl_cid: String,
         description: String,
         tags: Vec<String>,
-    ) -> NssaResult {
+    ) -> LezResult {
         let accounts = vec![registry_state, author, program_entry_pda];
 
         let args = registry_core::UpdateArgs {
@@ -75,6 +75,6 @@ mod registry_program {
         };
 
         let (post_states, chained_calls) = handlers::update::handle(&accounts, &args);
-        Ok(NssaOutput::with_chained_calls(post_states, chained_calls))
+        Ok(LezOutput::with_chained_calls(post_states, chained_calls))
     }
 }

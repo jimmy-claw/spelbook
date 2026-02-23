@@ -5,7 +5,7 @@
 //!
 //! Common JSON input fields:
 //! - `sequencer_url`: e.g. "http://127.0.0.1:3040"
-//! - `wallet_path`:   path to the NSSA wallet directory (sets NSSA_WALLET_HOME_DIR)
+//! - `wallet_path`:   path to the LEZ wallet directory (sets NSSA_WALLET_HOME_DIR)
 //! - `program_id_hex`: 64-char hex string identifying the registry program binary
 
 use nssa::{

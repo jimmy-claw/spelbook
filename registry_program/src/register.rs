@@ -16,7 +16,7 @@ use registry_core::{ProgramEntry, RegisterArgs, RegistryState};
 /// Authorization: the author must sign the transaction (`is_authorized = true`).
 /// The registry is permissionless — anyone can register a program.
 ///
-/// Note: PDA derivation correctness is enforced by the NSSA framework via the
+/// Note: PDA derivation correctness is enforced by the LEZ framework via the
 /// `pda` attribute in the guest binary. The handler just trusts account ordering.
 pub fn handle(
     accounts: &[AccountWithMetadata],
@@ -133,7 +133,7 @@ mod tests {
 
     /// Build the three standard accounts needed for Register tests.
     /// The program_entry_pda account ID is set to a dummy value — PDA correctness
-    /// is validated by the NSSA framework, not by the handler.
+    /// is validated by the LEZ framework, not by the handler.
     fn make_test_accounts(state_data: Vec<u8>, author_id: &[u8; 32], authorized: bool) -> Vec<AccountWithMetadata> {
         vec![
             make_account(&[10u8; 32], state_data, false), // registry_state
