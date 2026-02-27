@@ -31,7 +31,7 @@ const DEFAULT_STORAGE_URL: &str = "http://127.0.0.1:8080";
 
 #[derive(Parser)]
 #[command(name = "registry", version, about = "LEZ Program Registry CLI", long_about = None)]
-#[command(propagate_version = true)]
+// propagate_version removed to avoid conflict with --version arg
 struct Cli {
     /// Sequencer URL
     #[arg(long, env = "NSSA_SEQUENCER_URL", default_value = DEFAULT_SEQUENCER_URL, global = true)]

@@ -67,21 +67,10 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 [[package]]
 name = "amm_core"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/lssa.git?branch=main#bc84d5cf31b3f6967060c35a5b98618d99780ade"
-dependencies = [
- "borsh",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "risc0-zkvm",
- "serde",
-]
-
-[[package]]
-name = "amm_core"
-version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b#767b5afd388c7981bcdf6f5b5c80159607e07e5b"
 dependencies = [
  "borsh",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa_core",
  "risc0-zkvm",
  "serde",
 ]
@@ -1067,28 +1056,6 @@ checksum = "b05b61dc5112cbb17e4b6cd61790d9845d13888356391624cbe7e41efeac1e75"
 [[package]]
 name = "common"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/lssa.git?branch=main#bc84d5cf31b3f6967060c35a5b98618d99780ade"
-dependencies = [
- "anyhow",
- "base64",
- "borsh",
- "hex",
- "log",
- "logos-blockchain-common-http-client",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "reqwest",
- "serde",
- "serde_json",
- "serde_with",
- "sha2",
- "thiserror 2.0.18",
- "url",
-]
-
-[[package]]
-name = "common"
-version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b#767b5afd388c7981bcdf6f5b5c80159607e07e5b"
 dependencies = [
  "anyhow",
@@ -1097,8 +1064,8 @@ dependencies = [
  "hex",
  "log",
  "logos-blockchain-common-http-client",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa",
+ "nssa_core",
  "reqwest",
  "serde",
  "serde_json",
@@ -2518,42 +2485,19 @@ dependencies = [
 [[package]]
 name = "key_protocol"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/lssa.git?branch=main#bc84d5cf31b3f6967060c35a5b98618d99780ade"
-dependencies = [
- "aes-gcm",
- "anyhow",
- "base58",
- "bip39",
- "common 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "hex",
- "hmac-sha512",
- "itertools 0.14.0",
- "k256",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "rand 0.8.5",
- "secp256k1",
- "serde",
- "sha2",
- "thiserror 2.0.18",
-]
-
-[[package]]
-name = "key_protocol"
-version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b#767b5afd388c7981bcdf6f5b5c80159607e07e5b"
 dependencies = [
  "aes-gcm",
  "anyhow",
  "base58",
  "bip39",
- "common 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "common",
  "hex",
  "hmac-sha512",
  "itertools 0.14.0",
  "k256",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa",
+ "nssa_core",
  "rand 0.8.5",
  "secp256k1",
  "serde",
@@ -2602,50 +2546,52 @@ checksum = "09edd9e8b54e49e587e4f6295a7d29c3ea94d469cb40ab8ca70b288248a81db2"
 [[package]]
 name = "lez-cli"
 version = "0.1.0"
-source = "git+https://github.com/jimmy-claw/lez-framework.git?branch=main#7f15ec34a71f17633e29df076dbd0077f1009220"
+source = "git+https://github.com/jimmy-claw/lez-framework.git?rev=8a276a53#8a276a531104a5b3f00bf8dd3edf74c7ef715a1c"
 dependencies = [
  "base58",
  "borsh",
  "lez-framework-core",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
+ "nssa",
+ "nssa_core",
  "risc0-zkvm",
  "serde",
  "serde_json",
  "tokio",
- "wallet 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
+ "wallet",
 ]
 
 [[package]]
 name = "lez-framework"
 version = "0.1.0"
-source = "git+https://github.com/jimmy-claw/lez-framework.git?branch=main#7f15ec34a71f17633e29df076dbd0077f1009220"
+source = "git+https://github.com/jimmy-claw/lez-framework.git?rev=8a276a53#8a276a531104a5b3f00bf8dd3edf74c7ef715a1c"
 dependencies = [
  "borsh",
  "lez-framework-core",
  "lez-framework-macros",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
+ "nssa_core",
 ]
 
 [[package]]
 name = "lez-framework-core"
 version = "0.1.0"
-source = "git+https://github.com/jimmy-claw/lez-framework.git?branch=main#7f15ec34a71f17633e29df076dbd0077f1009220"
+source = "git+https://github.com/jimmy-claw/lez-framework.git?rev=8a276a53#8a276a531104a5b3f00bf8dd3edf74c7ef715a1c"
 dependencies = [
  "borsh",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
+ "nssa_core",
  "serde",
  "serde_json",
+ "sha2",
  "thiserror 1.0.69",
 ]
 
 [[package]]
 name = "lez-framework-macros"
 version = "0.1.0"
-source = "git+https://github.com/jimmy-claw/lez-framework.git?branch=main#7f15ec34a71f17633e29df076dbd0077f1009220"
+source = "git+https://github.com/jimmy-claw/lez-framework.git?rev=8a276a53#8a276a531104a5b3f00bf8dd3edf74c7ef715a1c"
 dependencies = [
  "proc-macro2",
  "quote",
+ "sha2",
  "syn 2.0.117",
 ]
 
@@ -2654,9 +2600,9 @@ name = "lez-registry-e2e"
 version = "0.1.0"
 dependencies = [
  "borsh",
- "common 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "common",
+ "nssa",
+ "nssa_core",
  "registry_core",
  "risc0-zkvm",
  "tokio",
@@ -2668,16 +2614,16 @@ version = "0.1.0"
 dependencies = [
  "base64",
  "borsh",
- "common 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "common",
  "hex",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa",
+ "nssa_core",
  "registry_core",
  "reqwest",
  "serde",
  "serde_json",
  "tokio",
- "wallet 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "wallet",
 ]
 
 [[package]]
@@ -3428,31 +3374,12 @@ dependencies = [
 [[package]]
 name = "nssa"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/lssa.git?branch=main#bc84d5cf31b3f6967060c35a5b98618d99780ade"
-dependencies = [
- "borsh",
- "hex",
- "log",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "rand 0.8.5",
- "risc0-binfmt",
- "risc0-build",
- "risc0-zkvm",
- "secp256k1",
- "serde",
- "sha2",
- "thiserror 2.0.18",
-]
-
-[[package]]
-name = "nssa"
-version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b#767b5afd388c7981bcdf6f5b5c80159607e07e5b"
 dependencies = [
  "borsh",
  "hex",
  "log",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa_core",
  "rand 0.8.5",
  "risc0-binfmt",
  "risc0-build",
@@ -3460,22 +3387,6 @@ dependencies = [
  "secp256k1",
  "serde",
  "sha2",
- "thiserror 2.0.18",
-]
-
-[[package]]
-name = "nssa_core"
-version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/lssa.git?branch=main#bc84d5cf31b3f6967060c35a5b98618d99780ade"
-dependencies = [
- "base58",
- "borsh",
- "bytemuck",
- "chacha20",
- "k256",
- "risc0-zkvm",
- "serde",
- "serde_with",
  "thiserror 2.0.18",
 ]
 
@@ -4168,14 +4079,14 @@ dependencies = [
  "hex",
  "lez-cli",
  "lez-framework",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa",
+ "nssa_core",
  "registry_core",
  "reqwest",
  "serde",
  "serde_json",
  "tokio",
- "wallet 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "wallet",
 ]
 
 [[package]]
@@ -4184,7 +4095,7 @@ version = "0.1.0"
 dependencies = [
  "borsh",
  "lez-framework",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa_core",
  "registry_core",
  "registry_program",
  "risc0-zkvm",
@@ -4202,7 +4113,7 @@ name = "registry_core"
 version = "0.1.0"
 dependencies = [
  "borsh",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa_core",
  "serde",
 ]
 
@@ -4212,7 +4123,7 @@ version = "0.1.0"
 dependencies = [
  "borsh",
  "lez-framework",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa_core",
  "registry_core",
  "risc0-zkvm",
  "serde",
@@ -5245,20 +5156,10 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 [[package]]
 name = "token_core"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/lssa.git?branch=main#bc84d5cf31b3f6967060c35a5b98618d99780ade"
-dependencies = [
- "borsh",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "serde",
-]
-
-[[package]]
-name = "token_core"
-version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b#767b5afd388c7981bcdf6f5b5c80159607e07e5b"
 dependencies = [
  "borsh",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa_core",
  "serde",
 ]
 
@@ -5640,63 +5541,31 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 [[package]]
 name = "wallet"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/lssa.git?branch=main#bc84d5cf31b3f6967060c35a5b98618d99780ade"
-dependencies = [
- "amm_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "anyhow",
- "async-stream",
- "base64",
- "borsh",
- "bytemuck",
- "clap",
- "common 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "env_logger",
- "futures",
- "hex",
- "indicatif",
- "itertools 0.14.0",
- "key_protocol 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "log",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "optfield",
- "rand 0.8.5",
- "serde",
- "serde_json",
- "sha2",
- "token_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?branch=main)",
- "tokio",
- "url",
-]
-
-[[package]]
-name = "wallet"
-version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b#767b5afd388c7981bcdf6f5b5c80159607e07e5b"
 dependencies = [
- "amm_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "amm_core",
  "anyhow",
  "async-stream",
  "base64",
  "borsh",
  "bytemuck",
  "clap",
- "common 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "common",
  "env_logger",
  "futures",
  "hex",
  "indicatif",
  "itertools 0.14.0",
- "key_protocol 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "key_protocol",
  "log",
- "nssa 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
- "nssa_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "nssa",
+ "nssa_core",
  "optfield",
  "rand 0.8.5",
  "serde",
  "serde_json",
  "sha2",
- "token_core 0.1.0 (git+https://github.com/logos-blockchain/lssa.git?rev=767b5afd388c7981bcdf6f5b5c80159607e07e5b)",
+ "token_core",
  "tokio",
  "url",
 ]
