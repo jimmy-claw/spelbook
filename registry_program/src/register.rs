@@ -90,7 +90,7 @@ pub fn handle(
     // where the account is already owned by this program will use new() semantics.
     (
         vec![
-            AccountPostState::new_claimed(registry_state_post),
+            AccountPostState::new_claimed_if_default(registry_state_post),
             AccountPostState::new(author_post),
             AccountPostState::new_claimed(program_entry_post),
         ],
