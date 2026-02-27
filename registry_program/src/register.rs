@@ -91,7 +91,7 @@ pub fn handle(
     (
         vec![
             AccountPostState::new_claimed_if_default(registry_state_post),
-            AccountPostState::new(author_post),
+            AccountPostState::new_claimed_if_default(author_post),
             AccountPostState::new_claimed(program_entry_post),
         ],
         vec![],
