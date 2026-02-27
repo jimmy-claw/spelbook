@@ -9,7 +9,7 @@ mod registry_program {
     #[allow(unused_imports)]
     use super::*;
     use ::registry_program as handlers;
-    use nssa_core::account::AccountWithMetadata;
+    use lez_framework::prelude::AccountWithMetadata;
 
     /// Register a new program in the on-chain registry.
     ///
@@ -22,7 +22,7 @@ mod registry_program {
         #[account(mut)] registry_state: AccountWithMetadata,
         #[account(signer)] author: AccountWithMetadata,
         #[account(init)] program_entry_pda: AccountWithMetadata,
-        program_id: nssa_core::program::ProgramId,
+        program_id: ProgramId,
         name: String,
         version: String,
         idl_cid: String,
@@ -58,7 +58,7 @@ mod registry_program {
         #[account(mut)] registry_state: AccountWithMetadata,
         #[account(signer)] author: AccountWithMetadata,
         #[account(mut)] program_entry_pda: AccountWithMetadata,
-        program_id: nssa_core::program::ProgramId,
+        program_id: ProgramId,
         version: String,
         idl_cid: String,
         description: String,

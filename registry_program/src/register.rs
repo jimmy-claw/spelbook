@@ -7,8 +7,8 @@
 // - accounts[1]: author account (must be authorized signer)
 // - accounts[2]: program_entry PDA (must be uninitialized — Account::default())
 
-use nssa_core::account::{Account, AccountWithMetadata};
-use nssa_core::program::{AccountPostState, ChainedCall};
+use lez_framework::prelude::{Account, AccountWithMetadata};
+use lez_framework::prelude::{AccountPostState, ChainedCall};
 use registry_core::{ProgramEntry, RegisterArgs, RegistryState};
 
 /// Handle the Register instruction.
@@ -91,7 +91,7 @@ pub fn handle(
     (
         vec![
             AccountPostState::new_claimed_if_default(registry_state_post),
-            AccountPostState::new(author_post),
+            AccountPostState::new_claimed_if_default(author_post),
             AccountPostState::new_claimed(program_entry_post),
         ],
         vec![],
