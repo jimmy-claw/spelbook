@@ -11,5 +11,6 @@ path = "src/bin/registry.rs"
 registry_core = { path = "../../registry_core" }
 registry_program = { path = "../../registry_program" }
 lez-framework = { workspace = true }
+nssa_core = { workspace = true, default-features = false, features = [] }
 risc0-zkvm = { workspace = true }
 borsh = { workspace = true }
