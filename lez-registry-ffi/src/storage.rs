@@ -1,5 +1,5 @@
 //! Logos Storage (Codex) operation implementations.
-//! Uses the Codex HTTP REST API: POST /api/codex/v1/data, GET /api/codex/v1/data/{cid}/...
+//! Uses the Codex HTTP REST API: POST /api/storage/v1/data, GET /api/storage/v1/data/{cid}/...
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 use serde_json::{json, Value};
@@ -63,7 +63,7 @@ pub async fn upload_async(logos_storage_url: &str, file_path: &str) -> String {
         .unwrap_or("upload")
         .to_string();
 
-    let url = format!("{}/api/codex/v1/data", logos_storage_url.trim_end_matches('/'));
+    let url = format!("{}/api/storage/v1/data", logos_storage_url.trim_end_matches('/'));
 
     let client = reqwest::Client::new();
     let part = reqwest::multipart::Part::bytes(file_bytes)
@@ -145,7 +145,7 @@ pub fn download(args: &str) -> String {
 
 pub async fn download_async(logos_storage_url: &str, cid: &str) -> String {
     let url = format!(
-        "{}/api/codex/v1/data/{}/network/stream",
+        "{}/api/storage/v1/data/{}/network/stream",
         logos_storage_url.trim_end_matches('/'),
         cid
     );
