@@ -290,23 +290,12 @@ async fn upload_to_storage(file_path: &str, storage_url: &str) -> Result<String>
         .await
         .with_context(|| format!("cannot read file '{}'", file_path))?;
 
-    let filename = std::path::Path::new(file_path)
-        .file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("upload")
-        .to_string();
-
-    let url = format!("{}/api/codex/v1/data", storage_url.trim_end_matches('/'));
+    let url = format!("{}/api/storage/v1/data", storage_url.trim_end_matches('/'));
     let client = reqwest::Client::new();
-    let part = reqwest::multipart::Part::bytes(file_bytes)
-        .file_name(filename)
-        .mime_str("application/octet-stream")
-        .unwrap_or_else(|_| reqwest::multipart::Part::bytes(vec![]));
-    let form = reqwest::multipart::Form::new().part("file", part);
-
     let resp = client
         .post(&url)
-        .multipart(form)
+        .header("Content-Type", "application/octet-stream")
+        .body(file_bytes)
         .send()
         .await
         .context("HTTP request to Logos Storage failed")?;
@@ -331,7 +320,7 @@ async fn upload_to_storage(file_path: &str, storage_url: &str) -> Result<String>
 /// Download content from Logos Storage by CID.
 async fn download_from_storage(cid: &str, storage_url: &str) -> Result<Vec<u8>> {
     let url = format!(
-        "{}/api/codex/v1/data/{}/network/stream",
+        "{}/api/storage/v1/data/{}/network/stream",
         storage_url.trim_end_matches('/'),
         cid
     );
