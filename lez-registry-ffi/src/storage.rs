@@ -60,10 +60,13 @@ pub async fn upload_async(logos_storage_url: &str, file_path: &str) -> String {
     let url = format!("{}/api/storage/v1/data", logos_storage_url.trim_end_matches('/'));
 
     let client = reqwest::Client::new();
-    let resp = match client.post(&url)
+    let resp = match client
+        .post(&url)
         .header("Content-Type", "application/octet-stream")
         .body(file_bytes)
-        .send().await {
+        .send()
+        .await
+    {
         Ok(r) => r,
         Err(e) => return json!({"success": false, "error": format!("HTTP request failed: {}", e)}).to_string(),
     };
