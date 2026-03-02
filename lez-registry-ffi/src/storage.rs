@@ -57,22 +57,13 @@ pub async fn upload_async(logos_storage_url: &str, file_path: &str) -> String {
         }
     };
 
-    let filename = std::path::Path::new(file_path)
-        .file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("upload")
-        .to_string();
-
     let url = format!("{}/api/storage/v1/data", logos_storage_url.trim_end_matches('/'));
 
     let client = reqwest::Client::new();
-    let part = reqwest::multipart::Part::bytes(file_bytes)
-        .file_name(filename)
-        .mime_str("application/octet-stream")
-        .unwrap_or_else(|_| reqwest::multipart::Part::bytes(vec![]));
-    let form = reqwest::multipart::Form::new().part("file", part);
-
-    let resp = match client.post(&url).multipart(form).send().await {
+    let resp = match client.post(&url)
+        .header("Content-Type", "application/octet-stream")
+        .body(file_bytes)
+        .send().await {
         Ok(r) => r,
         Err(e) => return json!({"success": false, "error": format!("HTTP request failed: {}", e)}).to_string(),
     };
