@@ -331,7 +331,7 @@ async fn upload_to_storage(file_path: &str, storage_url: &str) -> Result<String>
 /// Download content from Logos Storage by CID.
 async fn download_from_storage(cid: &str, storage_url: &str) -> Result<Vec<u8>> {
     let url = format!(
-        "{}/api/codex/v1/data/{}/network/stream",
+        "{}/api/storage/v1/data/{}/network/stream",
         storage_url.trim_end_matches('/'),
         cid
     );
