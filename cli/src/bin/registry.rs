@@ -296,17 +296,14 @@ async fn upload_to_storage(file_path: &str, storage_url: &str) -> Result<String>
         .unwrap_or("upload")
         .to_string();
 
-    let url = format!("{}/api/codex/v1/data", storage_url.trim_end_matches('/'));
+    let url = format!("{}/api/storage/v1/data", storage_url.trim_end_matches('/'));
     let client = reqwest::Client::new();
-    let part = reqwest::multipart::Part::bytes(file_bytes)
-        .file_name(filename)
-        .mime_str("application/octet-stream")
-        .unwrap_or_else(|_| reqwest::multipart::Part::bytes(vec![]));
-    let form = reqwest::multipart::Form::new().part("file", part);
 
     let resp = client
         .post(&url)
-        .multipart(form)
+        .header("Content-Type", "application/octet-stream")
+        .header("Content-Disposition", format!("attachment; filename=\"{}\"", filename))
+        .body(file_bytes)
         .send()
         .await
         .context("HTTP request to Logos Storage failed")?;
