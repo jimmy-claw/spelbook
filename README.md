@@ -10,7 +10,7 @@ Built with [SPEL](https://github.com/logos-co/spel) — the Anchor-inspired deve
 
 ## What it does
 
-- **Register** a program: anyone can register their deployed program ID along with metadata and a Codex CID pointing to the IDL stored on Logos Storage.
+- **Register** a program: anyone can register their deployed program ID along with metadata and a Logos Storage CID pointing to the IDL.
 - **Update** an existing entry: only the original author may update.
 - **Discover** programs: query by name, author, or program ID.
 
@@ -34,7 +34,7 @@ make cli ARGS="--help"
 registry -p registry.bin register \
   --name my-program \
   --version 0.1.0 \
-  --idl-cid bafyf60cf92b09b3c33e1c6dcc60d271f... \
+  --idl-path ./my-program.json        # auto-uploads to Logos Storage \
   --description "My LEZ program" \
   --program-id 1673032724,3536244476,...
 
