@@ -4,7 +4,7 @@
 >
 > Just like a spellbook catalogues spells, SPELbook catalogues on-chain programs — their IDs, versions, authors, and IDLs. If you deployed it on LEZ, it belongs in the book.
 
-Built with [SPEL](https://github.com/jimmy-claw/spel) — the Anchor-inspired developer framework for LEZ programs.
+Built with [SPEL](https://github.com/logos-co/spel) — the Anchor-inspired developer framework for LEZ programs.
 
 ---
 
@@ -61,7 +61,7 @@ SPELbook is a standalone LEZ program. The multisig is a consumer of SPELbook (it
 
 ## v0.1.0
 
-Tagged [v0.1.0](https://github.com/jimmy-claw/spelbook/releases/tag/v0.1.0).
+Tagged [v0.1.0](https://github.com/logos-co/spelbook/releases/tag/v0.1.0).
 
 ## License
 
