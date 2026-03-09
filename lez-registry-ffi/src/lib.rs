@@ -1,4 +1,4 @@
-//! lez-registry-ffi — C FFI wrapper for the LEZ Program Registry
+//! spelbook-ffi — C FFI wrapper for the SPELbook Program Registry
 //!
 //! Enables Logos Core Qt plugins (C++) to interact with the LEZ registry
 //! and Logos Storage (Codex) without depending on Rust directly.
@@ -42,7 +42,7 @@ fn error_json(msg: &str) -> *mut c_char {
 // ── Registry Operations ───────────────────────────────────────────────────────
 
 /// Register a program in the LEZ registry.
-/// See lez_registry.h for args_json schema.
+/// See spelbook.h for args_json schema.
 #[no_mangle]
 pub extern "C" fn lez_registry_register(args_json: *const c_char) -> *mut c_char {
     let args = match cstr_to_str(args_json) {
