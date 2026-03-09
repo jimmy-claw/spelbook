@@ -69,7 +69,8 @@ pub async fn upload_async(logos_storage_url: &str, file_path: &str) -> String {
     // Content-Type: application/octet-stream (or specific mime type)
     // Content-Disposition: attachment; filename="<filename>"
     let client = reqwest::Client::new();
-    let resp = match client.post(&url)
+    let resp = match client
+        .post(&url)
         .header("Content-Type", "application/octet-stream")
         .header("Content-Disposition", format!("attachment; filename="{}"", filename))
         .body(file_bytes)
